@@ -442,6 +442,9 @@ draw.io -x -f svg -o diagram.svg input.drawio
 
 # PDF export
 draw.io -x -f pdf -o diagram.pdf input.drawio
+
+# Custom output directory (e.g. CI artifacts dir) — create if missing, then export there
+mkdir -p ./artifacts && draw.io -x -f png -e -s 2 -o ./artifacts/diagram.drawio.png input.drawio
 ```
 
 **Key flags:**
@@ -449,7 +452,7 @@ draw.io -x -f pdf -o diagram.pdf input.drawio
 - `-f` — format: `png`, `svg`, `pdf`, `jpg`
 - `-e` — embed diagram XML in output (PNG, SVG, PDF only) — exported file remains editable in draw.io
 - `-s` — scale: `1`, `2`, `3` (2 recommended for PNG)
-- `-o` — output file path (use `.drawio.png` double extension when embedding)
+- `-o` — output file path; accepts any directory (e.g. `./artifacts/diagram.drawio.png`) — `mkdir -p` the target dir first. Use `.drawio.png` double extension when embedding.
 - `-b` — border width around diagram (default: 0, recommend 10)
 - `-t` — transparent background (PNG only)
 - `--page-index 0` — export specific page (default: all)
