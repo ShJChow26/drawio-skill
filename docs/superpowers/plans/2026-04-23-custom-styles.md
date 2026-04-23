@@ -720,11 +720,11 @@ Replace with:
 
 **Step 0.5 — Resolve active preset.** Determine which (if any) user-defined style preset applies to this generation.
 
-- Scan the user's message for a named preset reference: "use my `<name>` style", "with `<name>`", "in `<name>` mode". If found → active preset = `<name>`.
+- Scan the user's message for a phrase that clearly names a style preset: "use my `<name>` style", "with my `<name>` style", "in `<name>` mode", "in the style of `<name>`". A bare `with <name>` does **not** count — "draw a diagram with redis" names a component, not a style. If a clear match is found → active preset = `<name>`.
 - Else, check `~/.drawio-skill/styles/` for any file with `"default": true`. If found → active preset = that one.
 - Else → no preset active; fall through to the built-in color/shape/edge conventions for the rest of the workflow.
 
-Load the preset JSON from `~/.drawio-skill/styles/<name>.json`, falling back to `<skill-dir>/styles/built-in/<name>.json`. If the named preset exists in neither location, tell the user the name is unknown, list the available presets (user dir + built-in), and stop — do **not** silently fall back to defaults.
+Load the preset JSON from `~/.drawio-skill/styles/<name>.json`, falling back to `<this-skill-dir>/styles/built-in/<name>.json`. If the named preset exists in neither location, tell the user the name is unknown, list the available presets (user dir + built-in), and stop — do **not** silently fall back to defaults.
 
 When a preset loads successfully, mention it in the first line of the reply: *"Using preset `<name>` (confidence: `<level>`)."* See the **Applying a preset** subsection below for how the preset changes color/shape/edge/font decisions.
 
