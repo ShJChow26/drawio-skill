@@ -14,6 +14,7 @@
 - Iterative design: preview, get feedback, and refine diagrams until they look right
 - **Auto-launch** draw.io desktop after export for manual fine-tuning
 - Triggers automatically when diagrams would help explain complex systems
+- **Style presets (v1.3 new)** — teach the skill your visual style from a `.drawio` file or image, save it by name, and apply it to future diagrams. See `## Style Presets` in SKILL.md.
 
 ## Multi-Platform Support
 
