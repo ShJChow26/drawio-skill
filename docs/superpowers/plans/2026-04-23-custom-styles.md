@@ -609,19 +609,22 @@ Input: path to a PNG/JPG (or any vision-readable image format). Output: candidat
 2. **Extract palette by visual inspection.** Identify distinct fill-color regions on shape bodies.
 
    For each distinct fill:
-   - `fillColor` — quantize: round each RGB channel to the nearest multiple of 16, harmonize lightness to ~85% (drawio-standard pastel look). Emit as `#RRGGBB`.
+   - `fillColor` — quantize each RGB channel to the nearest multiple of 16. If the resulting HSL lightness is below 0.75, raise it to 0.85 (keep hue and saturation; set L=0.85; HSL→RGB round-trip). Emit as `#RRGGBB`. Drawio-standard pastels occupy L≈0.85–0.96; below 0.75 reads as "too dark for a fill color" and this step lifts it back into that range.
    - `strokeColor` — read the matching border. If unreadable, derive from fill by darkening ~25% (match HSL, drop L by 0.25).
 
-   Map each `(fillColor, strokeColor)` pair to a named slot by hue of the fill:
-   - blue family → `primary`
-   - green family → `success`
-   - yellow family → `warning`
-   - orange family → `accent`
-   - red/pink family → `danger`
-   - grey family → `neutral`
-   - purple family → `secondary`
+   Map each `(fillColor, strokeColor)` pair to a named slot using this decision order:
 
-   Two distinct colors in the same hue family: keep the more frequently-used one in its canonical slot; the other spills to the nearest empty slot (adjacent hue).
+   1. **Grey check first.** If the fill has R, G, and B channels all within ±16 of each other (same definition as the XML path's grey-family rule), OR HSL saturation < 0.20, classify as `neutral`. This check wins regardless of hue angle.
+   2. **Hue band otherwise.** Use these explicit HSL hue ranges:
+      - 180°–260° → `primary` (blue)
+      - 80°–170° → `success` (green)
+      - 45°–65° → `warning` (yellow)
+      - 20°–44° → `accent` (orange)
+      - 0°–19° or 320°–360° → `danger` (red/pink)
+      - 260°–320° → `secondary` (purple)
+   3. **No band matched** (gap regions at 65°–80° or 170°–180°) → spill to the nearest band by angular distance.
+
+   **Collision rule.** If ≥2 distinct fills land in the same slot, sort them by total pixel area covered in the image (descending). The largest keeps the canonical slot. Remaining fills spill to the **nearest empty slot** measured by hue-band angular distance — first to adjacent bands on either side, then farther out. If every slot is already filled, drop the extras and warn in the summary.
 
 3. **Extract shape vocabulary.** Classify every visible shape by silhouette:
    - rounded rectangle → `rounded=1`
@@ -667,7 +670,7 @@ Input: path to a PNG/JPG (or any vision-readable image format). Output: candidat
    ```
    Adjustments:
    - <3 distinct shapes identifiable → `confidence: "low"`.
-   - Very clean image, ≥5 roles confidently mapped, all seven palette slots filled → may upgrade to `"high"`.
+   - Image path stays at `"medium"` by default. The only path to `"high"` is a strictly-verifiable signal: the source image was exported from drawio itself (recognizable drawio default chrome, grid, or a visible drawio watermark), **and** all seven palette slots are filled, **and** all seven roles are labeled. This preserves the semantic gap between inference-based (image) and parse-based (XML) provenance.
 
 ### Image edge cases
 
@@ -675,8 +678,9 @@ Input: path to a PNG/JPG (or any vision-readable image format). Output: candidat
 |---|---|
 | Vision unavailable | Stop as described above — do not fall back to guessing. |
 | Image has <3 identifiable shapes | Continue; mark `confidence: "low"`; summary explicitly warns the user that the preset is a loose approximation. |
-| Image has no visible labels | Role assignment collapses to shape-class only: cylinders → `database`, diamonds → `decision`, swimlanes → `container`, everything else → `service`. Palette/font/edges still captured. Summary notes: *"No labels readable — semantic roles beyond shape-class not inferred."* |
+| Image has no visible labels | Role assignment collapses to shape-class only: cylinders → `database`, diamonds → `decision`, swimlanes → `container`, dashed-bordered rectangles with grey fill → `external`, everything else → `service`. Palette/font/edges still captured. Summary notes: *"No labels readable — semantic roles beyond shape-class not inferred."* |
 | Two palette slots would land in the same hue family | Keep the more frequent one in its canonical slot; spill the other to the adjacent empty slot (rule in step 2). |
+| Image has more than 7 distinct fills | Keep the 7 most area-covering fills per the Step 2 collision rule. Summary warns that some colors were dropped. |
 ````
 
 - [ ] **Step 2: Verify the file still parses**
