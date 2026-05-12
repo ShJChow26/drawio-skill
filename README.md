@@ -6,6 +6,21 @@
   <img src="assets/workflow.png" width="900" alt="Workflow">
 </p>
 
+A skill that turns natural-language descriptions into `.drawio` XML and exports them to PNG / SVG / PDF / JPG via the native draw.io desktop CLI — with 6 diagram presets (ERD, UML Class, Sequence, Architecture, ML/DL, Flowchart), self-check + auto-fix (2 rounds), an iterative feedback loop (5 rounds), and style presets you can capture from a sample file or image.
+
+Works with Claude Code, Cursor, Copilot, OpenClaw, Codex, Hermes, and any agent that supports the [Agent Skills](https://agentskills.io) format.
+
+## Documentation
+
+| Doc | What's inside |
+|---|---|
+| [COMPARISON.md](COMPARISON.md) | Side-by-side tables vs. native agents and other draw.io skills/tools, with key-advantages summary |
+| [INSTALL_CLI.md](INSTALL_CLI.md) | draw.io desktop CLI install recipes for macOS / Windows / Linux |
+| [INSTALL_SKILL.md](INSTALL_SKILL.md) | Plugin marketplace, manual clone, and update commands |
+| [USAGE.md](USAGE.md) | Natural-language prompts, microservices walkthrough, topology demos (star / layered / ring) |
+| [STYLE_PRESETS.md](STYLE_PRESETS.md) | Built-in presets, "learn my style from a file" workflow, manage-presets commands |
+| [skills/drawio-skill/SKILL.md](skills/drawio-skill/SKILL.md) | Workflow guide loaded by the agent |
+
 ## What it does
 
 | Capability | Description |
@@ -16,10 +31,6 @@
 | Iterative review | Self-check + auto-fix (up to 2 rounds), then a 5-round feedback loop until you approve |
 | Style presets | Capture your visual style from a `.drawio` file or image, save by name, reapply on demand |
 | Auto-trigger | Activates whenever diagrams would help explain complex systems |
-
-## Comparison
-
-See [COMPARISON.md](COMPARISON.md) for side-by-side tables vs. native agents and vs. other draw.io skills/tools (jgraph/drawio-mcp, bahayonghang/drawio-skills, GBSOSS/ai-drawio), plus the key-advantages summary.
 
 ## Supported diagram types
 
@@ -32,20 +43,16 @@ See [COMPARISON.md](COMPARISON.md) for side-by-side tables vs. native agents and
 | Data | ER diagrams, data flow diagrams (DFD) | Table containers, PK/FK notation |
 | Other | org charts, mind maps, wireframes | — |
 
-## Installation
+## Quick Start
 
-Two steps — install the draw.io CLI first, then drop the skill into your host:
+Two steps — install the draw.io CLI first (see [INSTALL_CLI.md](INSTALL_CLI.md)), then drop the skill into your host (see [INSTALL_SKILL.md](INSTALL_SKILL.md)). After that, just describe what you want:
 
-1. **[Install draw.io desktop](INSTALL_CLI.md)** — per-platform recipes for macOS / Windows / Linux.
-2. **[Install the skill](INSTALL_SKILL.md)** — plugin marketplace (recommended), manual clone, and update commands.
+```
+Create a microservices e-commerce architecture with API Gateway, auth/user/order/product/payment services,
+Kafka message queue, notification service, and separate databases for each service
+```
 
-## Usage
-
-See [USAGE.md](USAGE.md) for natural-language prompts, a microservices walkthrough, and topology demos (star / layered / ring).
-
-## Style Presets
-
-See [STYLE_PRESETS.md](STYLE_PRESETS.md) for the built-in presets (`default` / `corporate` / `handdrawn`), the "learn my style from a file" workflow, and the full set of manage-presets commands.
+The skill plans the layout, generates the `.drawio` XML, exports to your chosen format, self-checks, and lets you iterate.
 
 ## Community
 
