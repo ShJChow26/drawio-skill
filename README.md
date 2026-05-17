@@ -1,38 +1,84 @@
 # drawio-skill — From Text to Professional Diagrams
 
-[中文文档](README_CN.md) | [Online Docs](https://agents365-ai.github.io/drawio-skill/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](#license)
+[![GitHub stars](https://img.shields.io/github/stars/Agents365-ai/drawio-skill?style=flat&logo=github)](https://github.com/Agents365-ai/drawio-skill/stargazers)
+[![SkillsMP](https://img.shields.io/badge/SkillsMP-listed-1f6feb)](https://skillsmp.com/skills/agents365-ai-drawio-skill-skill-md)
+[![Claude Code Plugin](https://img.shields.io/badge/Claude%20Code-plugin-8a2be2)](https://github.com/Agents365-ai/365-skills)
+[![Agent Skills](https://img.shields.io/badge/Agent%20Skills-compatible-2ea44f)](https://agentskills.io)
+
+**English** · [中文](README_CN.md) · [📖 Online Docs](https://agents365-ai.github.io/drawio-skill/)
+
+A skill that turns natural-language descriptions into `.drawio` XML and exports them to PNG / SVG / PDF / JPG via the native draw.io desktop CLI. Works with **Claude Code, Cursor, Copilot, OpenClaw, Codex, Hermes**, and any agent compatible with the [Agent Skills](https://agentskills.io) format.
 
 <p align="center">
   <img src="assets/workflow.png" width="900" alt="Workflow">
 </p>
 
-A skill that turns natural-language descriptions into `.drawio` XML and exports them to PNG / SVG / PDF / JPG via the native draw.io desktop CLI — with 6 diagram presets (ERD, UML Class, Sequence, Architecture, ML/DL, Flowchart), self-check + auto-fix (2 rounds), an iterative feedback loop (5 rounds), and style presets you can capture from a sample file or image.
+## ✨ Highlights
 
-Works with Claude Code, Cursor, Copilot, OpenClaw, Codex, Hermes, and any agent that supports the [Agent Skills](https://agentskills.io) format.
+- **6 diagram type presets** — ERD, UML Class, Sequence, Architecture, ML/Deep Learning, Flowchart
+- **Self-check + auto-fix** — reads its own PNG output and auto-fixes 6 issue types (up to 2 rounds)
+- **Iterative feedback loop** — 5-round targeted refinement until you're satisfied
+- **Style presets** — capture your visual style from a `.drawio` file or image, reuse on demand
+- **Grid-aligned layout** — complexity-scaled spacing, routing corridors, hub-center strategy
+- **Multi-agent, zero-config** — pure SKILL.md; no MCP server, no Python, no Node.js
 
-## Documentation
+## 🖼️ Example
 
-| Doc | What's inside |
-|---|---|
-| [docs/COMPARISON.md](docs/COMPARISON.md) | Side-by-side tables vs. native agents and other draw.io skills/tools, with key-advantages summary |
-| [docs/INSTALL_CLI.md](docs/INSTALL_CLI.md) | draw.io desktop CLI install recipes for macOS / Windows / Linux |
-| [docs/INSTALL_SKILL.md](docs/INSTALL_SKILL.md) | Plugin marketplace, manual clone, and update commands |
-| [docs/USAGE.md](docs/USAGE.md) | Natural-language prompts, microservices walkthrough, topology demos (star / layered / ring) |
-| [docs/STYLE_PRESETS.md](docs/STYLE_PRESETS.md) | Built-in presets, "learn my style from a file" workflow, manage-presets commands |
-| [skills/drawio-skill/SKILL.md](skills/drawio-skill/SKILL.md) | Workflow guide loaded by the agent |
+> **Prompt:** *Create a microservices e-commerce architecture with Mobile/Web/Admin clients, API Gateway, Auth/User/Order/Product/Payment services, Kafka message queue, Notification service, and User DB / Order DB / Product DB / Redis Cache / Stripe API.*
 
-## What it does
+<p align="center">
+  <img src="assets/microservices-example.png" width="800" alt="Microservices Architecture">
+</p>
 
-| Capability | Description |
-|---|---|
-| `.drawio` XML generation | From natural-language descriptions |
-| Multi-format export | PNG / SVG / PDF / JPG via the native draw.io desktop CLI |
-| 6 diagram type presets | ERD, UML Class, Sequence, Architecture, ML/Deep Learning, Flowchart |
-| Iterative review | Self-check + auto-fix (up to 2 rounds), then a 5-round feedback loop until you approve |
-| Style presets | Capture your visual style from a `.drawio` file or image, save by name, reapply on demand |
-| Auto-trigger | Activates whenever diagrams would help explain complex systems |
+More walkthroughs (star / layered / ring topologies) in [docs/USAGE.md](docs/USAGE.md).
 
-## Supported diagram types
+## 🚀 Installation
+
+### 1. Install the draw.io desktop CLI
+
+| Platform | Command |
+|----------|---------|
+| **macOS** | `brew install --cask drawio` |
+| **Windows** | [Download installer](https://github.com/jgraph/drawio-desktop/releases) |
+| **Linux** | `.deb`/`.rpm` from [releases](https://github.com/jgraph/drawio-desktop/releases); `sudo apt install xvfb` for headless |
+
+Verify with `drawio --version`. Full recipes in [docs/INSTALL_CLI.md](docs/INSTALL_CLI.md).
+
+### 2. Install the skill
+
+```bash
+# Any agent (Claude Code, Cursor, Copilot, ...)
+npx skills add Agents365-ai/365-skills -g
+```
+
+```text
+# Claude Code plugin marketplace
+> /plugin marketplace add Agents365-ai/365-skills
+> /plugin install drawio
+```
+
+```bash
+# Manual install
+git clone https://github.com/Agents365-ai/drawio-skill.git \
+  ~/.claude/skills/drawio-skill
+```
+
+Also indexed on [SkillsMP](https://skillsmp.com/skills/agents365-ai-drawio-skill-skill-md) and [ClawHub](https://clawhub.ai/agents365-ai/drawio-pro-skill). Full options + update commands in [docs/INSTALL_SKILL.md](docs/INSTALL_SKILL.md).
+
+## ⚡ Quick Start
+
+After installation, just describe what you want:
+
+```
+Create a microservices e-commerce architecture with API Gateway,
+Auth/User/Order/Product/Payment services, Kafka message queue,
+Notification service, and a separate database per service
+```
+
+The skill plans the layout, generates the `.drawio` XML, exports to your chosen format, self-checks the result, and lets you iterate.
+
+## 🧩 Supported Diagram Types
 
 | Category | Examples | Notable features |
 |---|---|---|
@@ -43,20 +89,33 @@ Works with Claude Code, Cursor, Copilot, OpenClaw, Codex, Hermes, and any agent 
 | Data | ER diagrams, data flow diagrams (DFD) | Table containers, PK/FK notation |
 | Other | org charts, mind maps, wireframes | — |
 
-## Quick Start
+## 🆚 Why drawio-skill?
 
-Two steps — install the draw.io CLI first (see [docs/INSTALL_CLI.md](docs/INSTALL_CLI.md)), then drop the skill into your host (see [docs/INSTALL_SKILL.md](docs/INSTALL_SKILL.md)). After that, just describe what you want:
+Compared with a native agent (no skill):
 
-```
-Create a microservices e-commerce architecture with API Gateway, auth/user/order/product/payment services,
-Kafka message queue, notification service, and separate databases for each service
-```
+| Feature | Native agent | drawio-skill |
+|---|---|---|
+| Self-check after export | ❌ | ✅ reads PNG, auto-fixes 6 issue types |
+| Iterative review loop | ❌ manual re-prompt | ✅ targeted edits, 5-round safety valve |
+| Diagram type presets | ❌ | ✅ 6 presets (ERD, UML, Seq, Arch, ML, Flow) |
+| Grid-aligned layout | ❌ | ✅ 10px snap, routing corridors |
+| Color palette | random / inconsistent | ✅ 7-color semantic system |
+| Style presets | ❌ | ✅ learn from `.drawio` file or image |
 
-The skill plans the layout, generates the `.drawio` XML, exports to your chosen format, self-checks, and lets you iterate.
+Full comparison with other draw.io skills, MCP servers, and plugins in [docs/COMPARISON.md](docs/COMPARISON.md).
 
-## Community
+## 📚 Documentation
 
-Join us for help, Q&A, and updates:
+| Doc | What's inside |
+|---|---|
+| [docs/INSTALL_CLI.md](docs/INSTALL_CLI.md) | draw.io desktop CLI install recipes for macOS / Windows / Linux |
+| [docs/INSTALL_SKILL.md](docs/INSTALL_SKILL.md) | Plugin marketplace, manual clone, update commands |
+| [docs/USAGE.md](docs/USAGE.md) | Natural-language prompts, microservices walkthrough, topology demos |
+| [docs/STYLE_PRESETS.md](docs/STYLE_PRESETS.md) | Built-in presets, "learn my style from a file" workflow, manage commands |
+| [docs/COMPARISON.md](docs/COMPARISON.md) | Side-by-side tables vs. native agents and other draw.io skills/tools |
+| [skills/drawio-skill/SKILL.md](skills/drawio-skill/SKILL.md) | Workflow guide loaded by the agent |
+
+## 💬 Community
 
 - **Discord:** https://discord.gg/79JF5Atuk
 - **WeChat:** scan the QR code below
@@ -65,7 +124,7 @@ Join us for help, Q&A, and updates:
   <img src="https://raw.githubusercontent.com/Agents365-ai/images_payment/main/qrcode/agents365ai_wechat_1.png" width="200" alt="WeChat Community Group">
 </p>
 
-## Support
+## ❤️ Support
 
 If this skill helps you, consider supporting the author:
 
@@ -94,13 +153,13 @@ If this skill helps you, consider supporting the author:
   </tr>
 </table>
 
-## Author
+## 👤 Author
 
 **Agents365-ai**
 
-- Bilibili: https://space.bilibili.com/441831884
 - GitHub: https://github.com/Agents365-ai
+- Bilibili: https://space.bilibili.com/441831884
 
-## License
+## 📄 License
 
-MIT
+[MIT](https://opensource.org/licenses/MIT)
